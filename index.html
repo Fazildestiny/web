@@ -3,53 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Year/Month Picker</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Contact Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input, textarea {
+            margin-bottom: 15px;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+        input:focus, textarea:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+        button {
+            padding: 15px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .feedback {
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+            font-size: 16px;
+        }
+        .feedback.success {
+            color: #28a745;
+        }
+        .feedback.error {
+            color: #dc3545;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Select Year and Month</h1>
-        <select id="yearPicker">
-            <!-- JavaScript will populate this -->
-        </select>
-        <select id="monthPicker">
-            <!-- JavaScript will populate this -->
-        </select>
-        <br>
-        <button onclick="showEvent()">Go</button>
-        <div id="eventInfo" class="event-info"></div>
-    </div>
-    <div class="icons">
-        <img src="./images/home.png" alt="Home" id="homeButton" class="icon">
-        <img src="./images/mail.png" alt="Mail" id="mailButton" class="icon">
-        <img src="./images/about.png" alt="About" id="aboutButton" class="icon">
+        <h2>Contact Me</h2>
+        <form id="contact-form">
+            <input type="email" id="email" name="email" placeholder="Your email" required>
+            <textarea id="message" name="message" rows="5" placeholder="Your message" required></textarea>
+            <button type="submit">Send</button>
+            <div class="feedback" id="feedback"></div>
+        </form>
     </div>
 
-    <div id="mailModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Contact Us</h2>
-            <form id="mailForm">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
-                <button type="submit">Send</button>
-            </form>
-        </div>
-    </div>
-
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
     <script>
-        (function(){
-            emailjs.init("Rh-R2wObJ2ZRqwkXR");
+        (function() {
+            emailjs.init("Rh-R2wObJ2ZRqwkXR"); // Public Key
         })();
+
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            const feedback = document.getElementById('feedback');
+
+            emailjs.send('service_ebgi65c', 'template_iz2lt2w', {
+                from_email: email,
+                message: message
+            }).then(function(response) {
+                feedback.textContent = 'Email sent successfully!';
+                feedback.className = 'feedback success';
+                feedback.style.display = 'block';
+            }, function(error) {
+                feedback.textContent = 'Failed to send email: ' + JSON.stringify(error);
+                feedback.className = 'feedback error';
+                feedback.style.display = 'block';
+            });
+
+            document.getElementById('contact-form').reset();
+        });
     </script>
-    <script src="script.js"></script>
 </body>
 </html>
 
 
 
 
-    
